@@ -1,0 +1,26 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "SEU_WIFI";
+const char* password = "SENHA_WIFI";
+String botToken = "SEU_BOT_TOKEN";
+String chatID = "SEU_CHAT_ID";
+
+void sendTelegramMessage(String message) {
+    HTTPClient http;
+    String url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatID + "&text=" + message;
+    http.begin(url);
+    int httpResponseCode = http.GET();
+    http.end();
+}
+
+void setup() {
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) { delay(1000); }
+    sendTelegramMessage("🚀 ESP32 conectado! Pronto para monitorar a rig!");
+}
+
+void loop() {
+    delay(60000);  // Enviar atualizações a cada 1 minuto
+    sendTelegramMessage("⚡ Sua rig está funcionando normalmente!");
+}
